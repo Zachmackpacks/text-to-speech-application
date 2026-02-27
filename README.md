@@ -41,9 +41,9 @@ This project implements the local architecture you described:
 ```bash
 cd backend
 python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+.venv\Scripts\activate
+py -m pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
 ```
 
 ### Optional environment variables
@@ -79,8 +79,8 @@ Frontend default URL: `http://localhost:3000`
 ```bash
 cd backend
 python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
+.venv\Scripts\activate
+py -m pip install -r requirements.txt
 pytest -q
 ```
 
