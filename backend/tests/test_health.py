@@ -13,3 +13,5 @@ def test_health_endpoint_shape():
     assert 'whisper' in data
     assert {'device', 'model_size', 'compute_type'} <= set(data['whisper'].keys())
     assert isinstance(data['llm_configured'], bool)
+    assert isinstance(data['llm_configured'], bool)
+

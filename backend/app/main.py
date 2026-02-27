@@ -3,7 +3,9 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
-import requests
+import json
+from urllib import request as urllib_request
+from urllib.error import HTTPError, URLError
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from faster_whisper import WhisperModel
@@ -66,12 +68,18 @@ def summarize_text(transcript: str) -> str:
         "Content-Type": "application/json",
     }
 
+    req = urllib_request.Request(
+        api_url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers=headers,
+        method="POST",
+    )
+
     try:
-        response = requests.post(api_url, json=payload, headers=headers, timeout=45)
-        response.raise_for_status()
-        data = response.json()
+        with urllib_request.urlopen(req, timeout=45) as response:
+            data = json.loads(response.read().decode("utf-8"))
         return data["choices"][0]["message"]["content"].strip()
-    except Exception as exc:
+    except (HTTPError, URLError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
         return f"Summary unavailable from external LLM API: {exc}"
 
 
